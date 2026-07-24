@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# local design dumps (not needed at runtime)
+public/figma/design-ref.png
 
 # vercel
 .vercel

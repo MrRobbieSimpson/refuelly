@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Refuelly
 
-## Getting Started
+Find live fuel prices across the **United Kingdom**, **Northern Ireland**, and **Ireland** — list and map views, amenities, and EV charger lookup.
 
-First, run the development server:
+Built with **Next.js 16**, **React 19**, **Tailwind CSS 4**, and **MapLibre GL**.
+
+## Features
+
+- Live prices from public UK retailer open-data feeds (Asda, Tesco, MFG, Applegreen)
+- Ireland prices via [FuelFinder.ie](https://www.fuelfinder.ie) (community data)
+- Search by **postcode**, **town/city**, or **brand** (~20 mile radius for places)
+- Region tabs: **UK · NI · Ireland**
+- Currency toggle: **£ pence / € cents**
+- Amenities (brand defaults + optional OSM)
+- EV charging via [Open Charge Map](https://openchargemap.org) (optional API key)
+- **Map View** with dark basemap and beam-style markers
+- **Directions** opens Map View and highlights that station
+
+## Requirements
+
+- Node.js 20+ recommended
+- npm
+
+## Setup
+
+```bash
+git clone https://github.com/MrRobbieSimpson/refuelly.git
+cd refuelly
+npm install
+cp .env.example .env.local
+```
+
+### Environment variables
+
+Create `.env.local` (never commit this file):
+
+```bash
+# Optional but recommended — free key from https://openchargemap.org/site/develop/apikey
+OPENCHARGEMAP_API_KEY=your_key_here
+```
+
+Without an Open Charge Map key, the app still runs; EV badges fall back to brand/OSM heuristics.
+
+## Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm start       # serve production build
+npm run lint    # eslint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+app/
+  api/stations/     # Aggregates UK + IE feeds, search, OCM EV enrichment
+  components/       # UI, map, station cards
+  data/             # Types + fallback stations
+  lib/              # Fuel feeds, amenities, Open Charge Map
+public/figma/       # Logo / static SVG assets
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Data sources
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Region | Source | Notes |
+|--------|--------|--------|
+| UK / NI | Retailer JSON open data | E10 = unleaded, B7 = diesel (pence/L) |
+| Ireland | FuelFinder.ie public API | Community prices (€/L) |
+| EV | Open Charge Map API | Requires free API key |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Coverage depends on what retailers and community sources publish. Not every forecourt is included.
 
-## Deploy on Vercel
+## Design
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+UI inspired by the Refuelly Figma file (list + map desktop frames).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+Private project unless otherwise noted.
